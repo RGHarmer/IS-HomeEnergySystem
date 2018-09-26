@@ -9,8 +9,8 @@ import jade.lang.acl.ACLMessage;
 
 public class MessageTicker extends TickerBehaviour {
 
-	public ApplianceRequestInitiator ari;
-	public RetailContractInitiator rci;
+	private ApplianceRequestInitiator ari;
+	private RetailContractInitiator rci;
 	private ACLMessage msgAppliance;
 	private ACLMessage msgRetail;
 	

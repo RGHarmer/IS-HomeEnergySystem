@@ -10,6 +10,7 @@ import jade.core.Agent;
  
 public class HomeAgent extends Agent {
 	
+	public String name;
 	private Clock clock;
 	private int cycleInterval = 10000; //in milliseconds
 	private MessageTicker ticker;

@@ -8,7 +8,12 @@ import jade.lang.acl.MessageTemplate;
 
 public abstract class RetailerAgent extends Agent {
 	
-	private RetailContractResponder rcr;
+	public String name;
+	public float score;
+	protected RetailContractResponder rcr;
+	protected float currentRate;
+	protected float minRate;
+	protected float penaltyRate;
 	
 	protected void setup() {
 		MessageTemplate template = MessageTemplate.and(
@@ -20,4 +25,7 @@ public abstract class RetailerAgent extends Agent {
 		addBehaviour(rcr);
 	}
 	
+	public abstract void ResetRates();
+	
+	public abstract void Yield();
 }

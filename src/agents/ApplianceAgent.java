@@ -11,9 +11,12 @@ import java.util.Map;
 import behaviours.ApplianceRequestResponder;
  
 public class ApplianceAgent extends Agent {
+	
+	public String name;
 	private Map<Instant,Float> archive;
 	private float currentEstimate;
 	private float currentUsage;
+	
 	
 	private ApplianceRequestResponder arr;
 	
@@ -26,6 +29,7 @@ public class ApplianceAgent extends Agent {
 		addBehaviour(arr);
 	}
 	
-	
-	
+	public void Reset() {
+		
+	}
 } 
