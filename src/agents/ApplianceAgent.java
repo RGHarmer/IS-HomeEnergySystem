@@ -4,6 +4,7 @@ import jade.core.Agent;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import util.ApplianceHomeMsg;
 
 import java.time.Instant;
 import java.util.Map;
@@ -11,8 +12,7 @@ import java.util.Map;
 import behaviours.ApplianceRequestResponder;
  
 public class ApplianceAgent extends Agent {
-	
-	public String name;
+
 	private Map<Instant,Float> archive;
 	private float currentEstimate;
 	private float currentUsage;
@@ -31,5 +31,9 @@ public class ApplianceAgent extends Agent {
 	
 	public void Reset() {
 		
+	}
+	
+	public ApplianceHomeMsg ContructMsgObject(Instant timeStamp) {
+		return new ApplianceHomeMsg(getName(), timeStamp, currentUsage, currentEstimate);
 	}
 } 

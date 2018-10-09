@@ -1,11 +1,16 @@
 package behaviours;
 
+import java.io.IOException;
 import java.util.Date;
 
+import agents.ApplianceAgent;
+import agents.HomeAgent;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
+import util.HomeApplianceMsg;
 
 public class MessageTicker extends TickerBehaviour {
 
@@ -23,7 +28,12 @@ public class MessageTicker extends TickerBehaviour {
 			//msgAppliance.addReceiver(...);
 		msgAppliance.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgAppliance.setReplyByDate(new Date(System.currentTimeMillis() + period));
-		msgAppliance.setContent("[APPLIANCE MESSAGE CONTENT]");
+		try {
+			msgAppliance.setContentObject(((HomeAgent) myAgent).ContructApplianceMsgObject());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// RETAILER MESSAGING
 		msgRetail = new ACLMessage(ACLMessage.CFP);

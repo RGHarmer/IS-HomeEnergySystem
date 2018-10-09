@@ -7,8 +7,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 public abstract class RetailerAgent extends Agent {
-	
-	public String name;
+
 	public float score;
 	protected RetailContractResponder rcr;
 	protected float currentRate;
