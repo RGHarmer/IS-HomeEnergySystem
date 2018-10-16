@@ -44,11 +44,11 @@ public class ApplianceRequestInitiator extends AchieveREInitiator {
 				//Energy Usage
 				float eu = ((EnergyUsageMessageContent)Content).EnergyUsage;
 				
-				//timestamp
+				//time stamp
 				Instant ts = ((EnergyUsageMessageContent)Content).Timestamp;
 				
 
-				((HomeAgent)myAgent).AddEnergyUsage(agentID, eu, ts);
+				//((HomeAgent)myAgent).AddEnergyUsage(agentID, eu, ts);
 			} catch (UnreadableException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

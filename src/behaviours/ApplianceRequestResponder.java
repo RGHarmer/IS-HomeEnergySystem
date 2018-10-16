@@ -11,9 +11,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREResponder;
-import util.ApplianceHomeMsg;
 import util.HomeApplianceMsg;
 
+@SuppressWarnings("serial")
 public class ApplianceRequestResponder extends AchieveREResponder {
 
 	public ApplianceRequestResponder(Agent a, MessageTemplate mt) {

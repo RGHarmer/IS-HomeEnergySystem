@@ -1,5 +1,6 @@
 package agents;
 
+@SuppressWarnings("serial")
 public class SmartRetailer extends RetailerAgent {
 
 	@Override

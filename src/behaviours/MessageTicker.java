@@ -2,16 +2,16 @@ package behaviours;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 
-import agents.ApplianceAgent;
 import agents.HomeAgent;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
-import util.HomeApplianceMsg;
 
+@SuppressWarnings("serial")
 public class MessageTicker extends TickerBehaviour {
 
 	private ApplianceRequestInitiator ari;
@@ -24,8 +24,10 @@ public class MessageTicker extends TickerBehaviour {
 		
 		// APPLIANCE MESSAGING
 		msgAppliance = new ACLMessage(ACLMessage.REQUEST);
-		//for all Appliances
-			//msgAppliance.addReceiver(...);
+		for (Iterator<AID> i = ((HomeAgent)myAgent).appliances.iterator(); i.hasNext();) {
+			AID appliance = i.next();
+			msgAppliance.addReceiver(appliance);
+		}
 		msgAppliance.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgAppliance.setReplyByDate(new Date(System.currentTimeMillis() + period));
 		try {
@@ -37,11 +39,18 @@ public class MessageTicker extends TickerBehaviour {
 		
 		// RETAILER MESSAGING
 		msgRetail = new ACLMessage(ACLMessage.CFP);
-		//for all Retailers
-			//msgRetail.addReceiver(...);
+		for (Iterator<AID> i = ((HomeAgent)myAgent).retailers.iterator(); i.hasNext();) {
+			AID retailer = i.next();
+			msgAppliance.addReceiver(retailer);
+		}
 		msgRetail.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgRetail.setReplyByDate(new Date(System.currentTimeMillis() + period));
-		msgRetail.setContent("[RETAILER MESSAGE CONTENT]");
+		try {
+			msgRetail.setContentObject(((HomeAgent) myAgent).ContructRetailMsgObject());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		ari = new ApplianceRequestInitiator(myAgent, msgAppliance);
 		rci = new RetailContractInitiator(myAgent, msgRetail);

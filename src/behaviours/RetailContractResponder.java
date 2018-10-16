@@ -8,6 +8,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetResponder;
 
+@SuppressWarnings("serial")
 public class RetailContractResponder extends ContractNetResponder {
 
 	public RetailContractResponder(Agent a, MessageTemplate mt) {

@@ -2,10 +2,8 @@ package agents;
 
 import java.util.Random;
 
+@SuppressWarnings("serial")
 public class RandomRetailer extends RetailerAgent {
-	
-	private float changeRate;
-	
 	private float minCurrent;
 	private float maxCurrent;
 	private float minMin;

@@ -1,5 +1,6 @@
 package agents;
 
+@SuppressWarnings("serial")
 public class FixedRetailer extends RetailerAgent {
 	
 	private float setRate = 2;

@@ -6,6 +6,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
+@SuppressWarnings("serial")
 public class RetailContractInitiator extends ContractNetInitiator {
 
 	public RetailContractInitiator(Agent a, ACLMessage cfp) {
@@ -13,6 +14,7 @@ public class RetailContractInitiator extends ContractNetInitiator {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void handlePropose(ACLMessage propose, Vector v) {
 		
 	}
@@ -25,6 +27,7 @@ public class RetailContractInitiator extends ContractNetInitiator {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	protected void handleAllResponses(Vector responses, Vector acceptances) {
 		
 	}
