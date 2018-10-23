@@ -11,7 +11,13 @@ import jade.core.Agent;
 public class GUIAgent extends Agent {
 	public JFrame frame;
 	public JPanel gui;
-
+	public JTextField minSellPrice = new JTextField();
+	public JTextField maxSellPrice = new JTextField();
+	public JTextField minBuyPrice = new JTextField();
+	public JTextField maxBuyPrice = new JTextField();
+    public JComboBox negotiationStrategy = new JComboBox();
+	
+	
 	public void SetupGui(){
 		
 		 gui = new JPanel(new java.awt.GridBagLayout());
@@ -19,6 +25,8 @@ public class GUIAgent extends Agent {
 	       GridBagConstraints constraint = new GridBagConstraints();
 	       Dimension dimension = new Dimension(140,20);
 
+	       Dimension negotiationDimension = new Dimension(240,20);
+	    
 		JButton button = new JButton("Click here!");
 		//gui.add(button);
 		
@@ -27,20 +35,20 @@ public class GUIAgent extends Agent {
 		
 		JLabel minLabel = new JLabel("Min:");
 		JLabel minBuyLabel = new JLabel("Min:");
-        JTextField minSellPrice = new JTextField();
+       
         minSellPrice.setPreferredSize(dimension);
 		JLabel maxLabel = new JLabel("Max:");
 		JLabel maxBuyLabel = new JLabel("Max:");
-        JTextField maxSellPrice = new JTextField();
         maxSellPrice.setPreferredSize(dimension);
-		
-        JTextField minBuyPrice = new JTextField();
-        minBuyPrice.setPreferredSize(dimension);
-        JTextField maxBuyPrice = new JTextField();
-        maxBuyPrice.setPreferredSize(dimension);
-        
+
+		minBuyPrice.setPreferredSize(dimension);
+		maxBuyPrice.setPreferredSize(dimension);
+        negotiationStrategy.setPreferredSize(negotiationDimension);
         
         JSeparator hr = new JSeparator(JSeparator.HORIZONTAL);
+        JSeparator vr = new JSeparator(JSeparator.VERTICAL);
+        
+        JLabel negotiationLabel = new JLabel("Negotiation strategy:");
         
         //SellPrice Section
         constraint.gridy = 0;
@@ -84,7 +92,19 @@ public class GUIAgent extends Agent {
 		constraint.gridy = 6;
 		gui.add(maxBuyPrice, constraint);
 		
-	
+		constraint.gridx = 3;
+		constraint.gridy = 0;
+		gui.add(vr, constraint);
+		
+		
+		constraint.gridx = 4;
+		constraint.gridy = 0;
+		gui.add(negotiationLabel, constraint);
+		
+		
+		constraint.gridx = 4;
+		constraint.gridy = 1;
+		gui.add(negotiationStrategy,constraint);
 		
 		frame.add(gui);
 		frame.pack();
