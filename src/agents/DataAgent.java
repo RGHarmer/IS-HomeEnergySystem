@@ -4,10 +4,15 @@ import java.io.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
-
+import java.time.*;
 import Serializable.TimeEnergyUsage;
+import Serializable.TimeEnergyUse;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 
@@ -24,9 +29,38 @@ public class DataAgent extends Agent {
 	static String line = "";
     static String comma = ",";
     
-    public int getApplianceValue(int row, int id) {
+    public Float getApplianceValue(int id, int row) {
     	return energyUsageData.get(row).values.get(id);
     }
+    
+    public Vector<TimeEnergyUse> getApplianceArchive(int id, int from, int to){
+    	Vector<TimeEnergyUse> toReturn = new Vector<TimeEnergyUse>();
+    	
+    	if(to > energyUsageData.size())
+    		to = energyUsageData.size();
+    	
+    	for(int i = from; i<to;i++) {
+    		/**
+    		 * Timestamp String to Instant
+    		 * 
+    		 * Reference: 
+    		 * https://stackoverflow.com/questions/35610597/parse-string-timestamp-to-instant-throws-unsupported-field-instantseconds/35611452
+    		 */
+    		
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    		String ts = energyUsageData.get(i).time;
+    		TemporalAccessor temporalAccessor = formatter.parse(ts);
+    	    LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
+    	    ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+    	    Instant tsInstant = Instant.from(zonedDateTime);
+    	    
+    	    TimeEnergyUse teuse = new TimeEnergyUse(energyUsageData.get(i).absoluteInterval, tsInstant, getApplianceValue(id, i));
+    		toReturn.add(teuse);
+    	}
+    	
+    	return toReturn;
+    }
+    
     
     /**
      * Will read data from the 'csvFile' location into Vector<TimeEnergyUsage> energyUsage
@@ -36,43 +70,35 @@ public class DataAgent extends Agent {
 	{ 
 		//Create a new Buffered Reader
 		 try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-			 	//Count keeps track of the line count
+			 	//int counter
 			 	int count = 0;
+			 
+			 
 			 	//While reading && count is less than the number of rows to count
 	            while ((line = br.readLine()) != null) {
-	            	
-	                
-	                
-	                //Skip the first line (The headers)
-	                if(count > 0) {
-	                	
-
+	            	if(count > 0) {
+	            		
+	            		Vector<Float> applianceVals = new Vector<Float>();
 		                //Separate values by comma
 		                String[] row = line.split(comma);
 	                	
+		                //1 is abs value
+		                int absVal = Integer.parseInt(row[0]);
+		                String ts = row[1];
 		                
-		                String ts = row[0];
-		                Vector<Integer> applianceVals = new Vector<Integer>();
-		                for(int i = 1; i< row.length; i++) {
-		                	applianceVals.add(Integer.valueOf(row[i]));
+		                //Skip first two rwos
+		                for(int i = 2; i< row.length; i++) {
+		                	
+		                	applianceVals.add(Float.valueOf(row[i]));
 		                }
 		                
-		                TimeEnergyUsage teu = new TimeEnergyUsage(ts, applianceVals);
-		                
-		                //System.out.println("Adding a new TimeUsage. Timestamp: " + ts + " and " + applianceOne);
-		                
+	
+		                TimeEnergyUsage teu = new TimeEnergyUsage(absVal, ts, applianceVals);
 		                energyUsageData.add(teu);
-		                //System.out.println("TEST");
-	                }
-	                
-	                
-	                //Increment count
-	                count++;
+	            	}
+	            	count++;
 	                
 	            }
-	            
-	            System.out.println("Number of records: "+count);
-	            System.out.println("value at appliance two, timestamp 3:"+getApplianceValue(3,2));
 	            return true;
 
 	        } catch (IOException e) {
@@ -85,8 +111,10 @@ public class DataAgent extends Agent {
 	public void setup() {
 		
 		energyUsageData = new Vector<TimeEnergyUsage>();
-		csvFile = "C:\\Users\\Solar\\Documents\\IS-HomeEnergySystem\\bin\\Electricity_P.csv";
-
-		readCSV();
+		csvFile = "C:\\Users\\Solar\\Documents\\IS-HomeEnergySystem\\bin\\CSV_DS.csv";
+		
+				readCSV();
+				System.out.println(getApplianceValue(0,0));
+	
 	}
 }

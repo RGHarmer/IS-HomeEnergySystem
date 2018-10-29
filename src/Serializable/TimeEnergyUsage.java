@@ -4,10 +4,12 @@ import java.time.Instant;
 import java.util.Vector;
 
 public class TimeEnergyUsage implements java.io.Serializable {
+	public int absoluteInterval;
 	public String time;
-	public Vector<Integer> values;
+	public Vector<Float> values;
 	
-	public TimeEnergyUsage(String t, Vector<Integer> vals) {
+	public TimeEnergyUsage(int abs, String t, Vector<Float> vals) {
+		absoluteInterval = abs;
 		time = t;
 		values = vals;
 	}
