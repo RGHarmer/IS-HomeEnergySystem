@@ -26,9 +26,10 @@ import behaviours.ApplianceRequestResponder;
 @SuppressWarnings("serial")
 public class ApplianceAgent extends Agent {
 
-	//private Map<Instant,Float> archive;
 	
+	//Data Archive (Goes into the future for testing purposes)
 	private Vector<TimeEnergyUse> archive;
+	//A pointer to select current row.
 	private int currentUsageRow;
 	private float currentEstimate;
 	private float currentUsage;
@@ -81,7 +82,16 @@ public class ApplianceAgent extends Agent {
 		//archive = DataAgent.getApplianceArchive(ID, 0, currentUsageRow)
 	}
 	
-	public boolean LinearRegressionSeason() {
+	
+	/**
+	 * REFRENCES:
+	 * https://www.geeksforgeeks.org/linear-regression-python-implementation/
+	 * https://introcs.cs.princeton.edu/java/97data/LinearRegression.java.html
+	 * 
+	 * From these references I was able to determine both how Linear Regression 
+	 * worked (For the most part) and how to implement the algorithm. 
+	 */
+	public void LinearRegressionSeason() {
 		
 		int timeAtPreviousSeasonRow;
 		boolean appropriateTimeFound = false;
@@ -127,7 +137,7 @@ public class ApplianceAgent extends Agent {
 					countMean = (countTotal/dataSetCount);
 					
 					
-					//calculate variance
+					//calculate variance and covariance
 					for(int j = 0; j<datasetX.size(); j++) {
 						datasetVariance += ((datasetX.get(j) - datasetMean)*(datasetX.get(j) - datasetMean));
 						datasetCovariance += (j - countMean)*(datasetX.get(j) - datasetMean);
@@ -148,14 +158,14 @@ public class ApplianceAgent extends Agent {
 					System.out.println("REGRESSION:");
 					System.out.println(rss);
 					System.out.println(ssr);
-					return true;
+					
+					currentEstimate = rss;
 				}
 				
 				
 			}
 			
 		}
-		return false;
 		
 	}
 	
