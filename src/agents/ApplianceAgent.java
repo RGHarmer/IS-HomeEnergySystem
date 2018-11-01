@@ -28,7 +28,7 @@ public class ApplianceAgent extends Agent {
 
 	
 	//Data Archive (Goes into the future for testing purposes)
-	private Vector<TimeEnergyUse> archive;
+	public Vector<TimeEnergyUse> archive;
 	//A pointer to select current row.
 	private int currentUsageRow;
 	private float currentEstimate;
