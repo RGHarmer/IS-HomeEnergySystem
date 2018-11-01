@@ -33,8 +33,6 @@ public class ApplianceAgent extends Agent {
 	private int currentUsageRow;
 	private float currentEstimate;
 	private float currentUsage;
-	
-	
 	private ApplianceRequestResponder arr;
 	
 	protected void setup() {
@@ -69,11 +67,12 @@ public class ApplianceAgent extends Agent {
 	}
 	
 	public void Reset() {
-		
+		currentEstimate = 0;
+		currentUsage = 0;
 	}
 	
-	public ApplianceHomeMsg ContructMsgObject(Instant timeStamp) {
-		return new ApplianceHomeMsg(getName(), timeStamp, currentUsage, currentEstimate);
+	public ApplianceHomeMsg ConstructMsgObject(Instant timeStamp) {
+		return new ApplianceHomeMsg(timeStamp, currentUsage, currentEstimate);
 	}
 	
 	public void LoadDataFromAgent() {

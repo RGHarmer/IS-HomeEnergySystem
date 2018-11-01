@@ -1,6 +1,8 @@
 package agents; 
 
-import java.util.List;
+import java.time.Instant;
+import java.util.Map;
+import java.util.Vector;
 
 import behaviours.HomeSubscription;
 import behaviours.MessageTicker;
@@ -12,7 +14,6 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import util.AdjustableClock;
 import util.HomeApplianceMsg;
-import util.HomeRetailerMsg;
 
 @SuppressWarnings("serial")
 public class HomeAgent extends Agent {
@@ -20,12 +21,27 @@ public class HomeAgent extends Agent {
 	private AdjustableClock clock;
 	private int cycleInterval = 10000; //in milliseconds
 	private MessageTicker ticker;
-	public List<AID> appliances;
-	public List<AID> retailers;
-	
+	public Vector<AID> appliances;
+	public Map<AID,Float> fallbackUsage;
+	public Map<AID,Float> fallbackEstimate;
+	public Vector<AID> retailers;
 	public float energyEstimate;
+	public float energyUsage;
+	public Instant currentPeriod;
+	
+	public float minBuyRate;
+	public float aggression;
+	public float maxBuyRate;
+	public int iterations = 10;
+	
+	public AID retailer;
+	public float agreedEnergy;
+	public float agreedRate;
+	public float agreedPenalty;
 	
 	protected void setup() {
+		appliances = new Vector<AID>();
+		retailers = new Vector<AID>();
 		Subscribe("Appliance");
 		Subscribe("Retailer");
 		
@@ -34,7 +50,7 @@ public class HomeAgent extends Agent {
 		addBehaviour(ticker);
 	}
 	
-	public void Subscribe(String type) {
+	protected void Subscribe(String type) {
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription templateSD = new ServiceDescription();
 		templateSD.setType(type);
@@ -46,10 +62,8 @@ public class HomeAgent extends Agent {
 		addBehaviour(subscriber);
 	}
 
-	public HomeApplianceMsg ContructApplianceMsgObject() {
-		return new HomeApplianceMsg(clock.instant());
-	}
-	public HomeRetailerMsg ContructRetailMsgObject() {
-		return new HomeRetailerMsg(energyEstimate);
+	public HomeApplianceMsg ConstructApplianceMsgObject() {
+		currentPeriod = clock.instant();
+		return new HomeApplianceMsg(currentPeriod);
 	}
 }

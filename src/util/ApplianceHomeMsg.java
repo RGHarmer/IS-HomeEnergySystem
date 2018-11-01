@@ -5,13 +5,11 @@ import java.time.Instant;
 
 @SuppressWarnings("serial")
 public class ApplianceHomeMsg implements Serializable {
-	public String agentName;
 	public Instant timeStamp;
 	public float energyUsed;
 	public float energyEstimate;
 	
-	public ApplianceHomeMsg(String name, Instant time, float used, float estimate) {
-		agentName = name;
+	public ApplianceHomeMsg(Instant time, float used, float estimate) {
 		timeStamp = time;
 		energyUsed = used;
 		energyEstimate = estimate;

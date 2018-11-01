@@ -10,6 +10,7 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+import util.HomeRetailerMsg;
 
 @SuppressWarnings("serial")
 public class MessageTicker extends TickerBehaviour {
@@ -18,10 +19,21 @@ public class MessageTicker extends TickerBehaviour {
 	private RetailContractInitiator rci;
 	private ACLMessage msgAppliance;
 	private ACLMessage msgRetail;
+	private long period;
 	
-	public MessageTicker(Agent a, long period) {
-		super(a, period);
-		
+	public MessageTicker(Agent a, long per) {
+		super(a, per);
+		period = per;
+		UpdateBehaviours();
+	}
+	
+	protected void onTick() {
+		myAgent.addBehaviour(ari);
+		myAgent.addBehaviour(rci);
+		UpdateBehaviours();
+	}
+	
+	protected void UpdateBehaviours() {
 		// APPLIANCE MESSAGING
 		msgAppliance = new ACLMessage(ACLMessage.REQUEST);
 		for (Iterator<AID> i = ((HomeAgent)myAgent).appliances.iterator(); i.hasNext();) {
@@ -31,7 +43,7 @@ public class MessageTicker extends TickerBehaviour {
 		msgAppliance.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgAppliance.setReplyByDate(new Date(System.currentTimeMillis() + period));
 		try {
-			msgAppliance.setContentObject(((HomeAgent) myAgent).ContructApplianceMsgObject());
+			msgAppliance.setContentObject(((HomeAgent) myAgent).ConstructApplianceMsgObject());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,7 +58,7 @@ public class MessageTicker extends TickerBehaviour {
 		msgRetail.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgRetail.setReplyByDate(new Date(System.currentTimeMillis() + period));
 		try {
-			msgRetail.setContentObject(((HomeAgent) myAgent).ContructRetailMsgObject());
+			msgRetail.setContentObject(new HomeRetailerMsg(0,((HomeAgent) myAgent).iterations));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,10 +67,4 @@ public class MessageTicker extends TickerBehaviour {
 		ari = new ApplianceRequestInitiator(myAgent, msgAppliance);
 		rci = new RetailContractInitiator(myAgent, msgRetail);
 	}
-	
-	protected void onTick() {
-		myAgent.addBehaviour(ari);
-		myAgent.addBehaviour(rci);
-	}
-
 }

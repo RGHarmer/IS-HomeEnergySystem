@@ -4,13 +4,11 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class RetailerHomeMsg implements Serializable {
-	public String agentName;
-	public float energyPrice;
+	public float energyRate;
 	public float penaltyRate;
 	
-	public RetailerHomeMsg(String name, float price, float penalty) {
-		agentName = name;
-		energyPrice = price;
+	public RetailerHomeMsg(float price, float penalty) {
+		energyRate = price;
 		penaltyRate = penalty;
 	}
 }

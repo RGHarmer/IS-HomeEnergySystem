@@ -13,13 +13,13 @@ public class RandomRetailer extends RetailerAgent {
 
 	@Override
 	public void ResetRates() {
-		currentRate = minCurrent + (new Random().nextFloat() * (maxCurrent - minCurrent));
-		minRate = minMin + (new Random().nextFloat() * (currentRate - minMin));
-		penaltyRate = currentRate + (new Random().nextFloat() * (maxPenalty - currentRate));
+		initialRate = minCurrent + (new Random().nextFloat() * (maxCurrent - minCurrent));
+		minRate = minMin + (new Random().nextFloat() * (initialRate - minMin));
+		penaltyRate = initialRate + (new Random().nextFloat() * (maxPenalty - initialRate));
 	}
 
 	@Override
-	public void Yield() {
+	public void Yield(int step, int steps) {
 		currentRate -= minChange + (new Random().nextFloat() * (maxChange - minChange));
 		if (currentRate < minRate) {
 			currentRate = minRate;

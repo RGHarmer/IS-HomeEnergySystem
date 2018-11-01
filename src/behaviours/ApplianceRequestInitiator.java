@@ -1,6 +1,7 @@
 package behaviours;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.Vector;
 
 import Serializable.EnergyUsageMessageContent;
@@ -10,6 +11,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import jade.proto.AchieveREInitiator;
+import util.ApplianceHomeMsg;
 
 public class ApplianceRequestInitiator extends AchieveREInitiator {
 
@@ -31,29 +33,28 @@ public class ApplianceRequestInitiator extends AchieveREInitiator {
 	}
 	
 	protected void handleAllResultNotifications(Vector notifications) {
-		//For each agent
-		for(int i = 0; i<notifications.size();i++) {
-			
-			Object Content;
+		Vector<AID> temp = ((HomeAgent)myAgent).appliances;
+		for(int i = 0; i<notifications.size(); i++) {
+			ACLMessage message = (ACLMessage)notifications.get(i);
 			try {
-				Content = (((ACLMessage)notifications.get(i)).getContentObject());
-				
-				//AID
-				AID agentID = ((ACLMessage)notifications.get(i)).getSender();
-				
-				//Energy Usage
-				float eu = ((EnergyUsageMessageContent)Content).EnergyUsage;
-				
-				//time stamp
-				Instant ts = ((EnergyUsageMessageContent)Content).Timestamp;
-				
-
-				//((HomeAgent)myAgent).AddEnergyUsage(agentID, eu, ts);
+				ApplianceHomeMsg content = (ApplianceHomeMsg)message.getContentObject();
+				((HomeAgent)myAgent).energyUsage += content.energyUsed;
+				((HomeAgent)myAgent).fallbackUsage.put(message.getSender(), content.energyUsed);
+				((HomeAgent)myAgent).energyEstimate += content.energyEstimate;
+				((HomeAgent)myAgent).fallbackUsage.put(message.getSender(), content.energyUsed);
+				temp.remove(message.getSender());
 			} catch (UnreadableException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+			}			
+		}
+		for(int i = 0; i < temp.size(); i++) {
+			if (((HomeAgent)myAgent).fallbackUsage.get(temp.get(i)) != null) {
+				((HomeAgent)myAgent).energyUsage += ((HomeAgent)myAgent).fallbackUsage.get(temp.get(i));
 			}
-			
+			if (((HomeAgent)myAgent).fallbackEstimate.get(temp.get(i)) != null) {
+				((HomeAgent)myAgent).energyEstimate += ((HomeAgent)myAgent).fallbackEstimate.get(temp.get(i));
+			}
 		}
 		
 	}

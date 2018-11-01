@@ -7,6 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import util.RetailerHomeMsg;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 
@@ -15,8 +16,10 @@ public abstract class RetailerAgent extends Agent {
 
 	public float score;
 	protected RetailContractResponder rcr;
+	protected float initialRate;
 	protected float currentRate;
 	protected float minRate;
+	protected float aggression;
 	protected float penaltyRate;
 	
 	protected void setup() {
@@ -35,7 +38,7 @@ public abstract class RetailerAgent extends Agent {
 		addBehaviour(rcr);
 	}
 	
-	void register(ServiceDescription sd) {
+	protected void register(ServiceDescription sd) {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		dfd.addServices(sd);
@@ -47,7 +50,11 @@ public abstract class RetailerAgent extends Agent {
 		}
 	}
 	
+	public RetailerHomeMsg ConstructHomeMsg(int step, int steps) {
+		return new RetailerHomeMsg(currentRate, penaltyRate);
+	}
+	
 	public abstract void ResetRates();
 	
-	public abstract void Yield();
+	public abstract void Yield(int step, int steps);
 }

@@ -10,7 +10,7 @@ public class SmartRetailer extends RetailerAgent {
 	}
 
 	@Override
-	public void Yield() {
+	public void Yield(int step, int steps) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -47,7 +47,7 @@ public class ApplianceRequestResponder extends AchieveREResponder {
 			inform.setPerformative(ACLMessage.INFORM);
 			
 			try {
-				inform.setContentObject(((ApplianceAgent) myAgent).ContructMsgObject(((HomeApplianceMsg)request.getContentObject()).timeStamp));
+				inform.setContentObject(((ApplianceAgent) myAgent).ConstructMsgObject(((HomeApplianceMsg)request.getContentObject()).timeStamp));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
