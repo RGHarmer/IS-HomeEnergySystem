@@ -12,13 +12,11 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import util.AdjustableClock;
 import util.HomeApplianceMsg;
 
 @SuppressWarnings("serial")
 public class HomeAgent extends Agent {
 
-	private AdjustableClock clock;
 	private int cycleInterval = 10000; //in milliseconds
 	private MessageTicker ticker;
 	public Vector<AID> appliances;
@@ -27,8 +25,7 @@ public class HomeAgent extends Agent {
 	public Vector<AID> retailers;
 	public float energyEstimate;
 	public float energyUsage;
-	public Instant currentPeriod;
-	
+
 	public float minBuyRate;
 	public float aggression;
 	public float maxBuyRate;
@@ -45,7 +42,6 @@ public class HomeAgent extends Agent {
 		Subscribe("Appliance");
 		Subscribe("Retailer");
 		
-		clock = new AdjustableClock(1);
 		ticker = new MessageTicker(this, cycleInterval);
 		addBehaviour(ticker);
 	}
@@ -60,10 +56,5 @@ public class HomeAgent extends Agent {
 		
 		HomeSubscription subscriber = new HomeSubscription(this, DFService.createSubscriptionMessage(this,  getDefaultDF(),  template,  sc), type);
 		addBehaviour(subscriber);
-	}
-
-	public HomeApplianceMsg ConstructApplianceMsgObject() {
-		currentPeriod = clock.instant();
-		return new HomeApplianceMsg(currentPeriod);
 	}
 }

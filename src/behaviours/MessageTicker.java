@@ -42,12 +42,6 @@ public class MessageTicker extends TickerBehaviour {
 		}
 		msgAppliance.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 		msgAppliance.setReplyByDate(new Date(System.currentTimeMillis() + period));
-		try {
-			msgAppliance.setContentObject(((HomeAgent) myAgent).ConstructApplianceMsgObject());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		// RETAILER MESSAGING
 		msgRetail = new ACLMessage(ACLMessage.CFP);
