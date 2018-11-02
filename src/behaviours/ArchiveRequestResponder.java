@@ -47,7 +47,7 @@ public class ArchiveRequestResponder  extends AchieveREResponder {
 			
 			//Determine the Appliance Row Number
 			String defaultName = "Appliance";
-			int id = Integer.parseInt(request.REAL_SENDER.replace(defaultName, ""));
+			int id = Integer.parseInt(request.getSender().getName().replace(defaultName, ""));
 			
 			try {
 				//Return the Archive related to the row Number
