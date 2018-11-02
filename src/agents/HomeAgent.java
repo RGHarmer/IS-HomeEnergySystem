@@ -1,6 +1,5 @@
 package agents; 
 
-import java.time.Instant;
 import java.util.Map;
 import java.util.Vector;
 
@@ -9,10 +8,10 @@ import behaviours.MessageTicker;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
+import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import util.HomeApplianceMsg;
 
 @SuppressWarnings("serial")
 public class HomeAgent extends Agent {
@@ -37,6 +36,10 @@ public class HomeAgent extends Agent {
 	public float agreedPenalty;
 	
 	protected void setup() {
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Home");
+		sd.setName("Home");
+		register(sd);
 		appliances = new Vector<AID>();
 		retailers = new Vector<AID>();
 		Subscribe("Appliance");
@@ -44,6 +47,18 @@ public class HomeAgent extends Agent {
 		
 		ticker = new MessageTicker(this, cycleInterval);
 		addBehaviour(ticker);
+	}
+	
+	protected void register(ServiceDescription sd) {
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		dfd.addServices(sd);
+		try {
+			DFService.register(this, dfd);
+		}
+		catch (FIPAException fe) {
+			
+		}
 	}
 	
 	protected void Subscribe(String type) {
