@@ -9,12 +9,22 @@ import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 import java.time.*;
 import Serializable.TimeEnergyUsage;
 import Serializable.TimeEnergyUse;
+import behaviours.ApplianceRequestResponder;
+import behaviours.ArchiveRequestResponder;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPANames;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 /**
  * Data Agent is the agent that keeps track of appliance data.
@@ -24,11 +34,12 @@ import jade.core.behaviours.Behaviour;
  *
  */
 public class DataAgent extends Agent {
-	Vector<TimeEnergyUsage> energyUsageData;
+	public Vector<TimeEnergyUsage> energyUsageData;
 	static String csvFile;
 	static String line = "";
     static String comma = ",";
-    
+	private ArchiveRequestResponder archiveReqR;
+	
     public Float getApplianceValue(int id, int row) {
     	return energyUsageData.get(row).values.get(id);
     }
@@ -108,13 +119,36 @@ public class DataAgent extends Agent {
 	} 
 
 	
+	protected void register(ServiceDescription sd) {
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		dfd.addServices(sd);
+		try {
+			DFService.register(this, dfd);
+		}
+		catch(FIPAException fe) {
+			
+		}
+	}
+	
 	public void setup() {
+		Object[] args = getArguments();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("DataAgent");
+		sd.setName("DataAgent");
+		register(sd);
 		
 		energyUsageData = new Vector<TimeEnergyUsage>();
 		csvFile = "C:\\Users\\Solar\\Documents\\IS-HomeEnergySystem\\bin\\CSV_DS.csv";
 		
-				readCSV();
-				System.out.println(getApplianceValue(0,0));
+		readCSV();
 	
+		
+		MessageTemplate template = MessageTemplate.and(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+		
+		archiveReqR = new ArchiveRequestResponder(this, template);
+		
+		addBehaviour(archiveReqR);
 	}
 }
