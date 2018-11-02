@@ -5,7 +5,7 @@ import util.Negotiation;
 @SuppressWarnings("serial")
 public class SmartRetailer extends RetailerAgent {
 	
-	protected float aggression;
+	protected float aggression = 1;
 
 	@Override
 	public void ResetRates() {
