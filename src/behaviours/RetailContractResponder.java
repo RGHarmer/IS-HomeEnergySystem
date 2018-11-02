@@ -35,7 +35,7 @@ public class RetailContractResponder extends ContractNetResponder {
 			ACLMessage propose = cfp.createReply();
 			propose.setPerformative(ACLMessage.PROPOSE);
 			try {
-				propose.setContentObject(((RetailerAgent) myAgent).ConstructHomeMsg(message.iteration, expectedIterations));
+				propose.setContentObject(((RetailerAgent) myAgent).ConstructHomeMsg());
 				return propose;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -61,7 +61,14 @@ public class RetailContractResponder extends ContractNetResponder {
 	}
 	
 	protected void handleRejectProposal(ACLMessage reject) {
-		
+		((RetailerAgent)myAgent).sale = false;
+		((RetailerAgent)myAgent).ResetRates();
+	}
+	
+	protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+		((RetailerAgent)myAgent).sale = true;
+		((RetailerAgent)myAgent).ResetRates();
+		return accept;
 	}
 
 }

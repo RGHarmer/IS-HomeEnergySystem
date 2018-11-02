@@ -60,8 +60,29 @@ public class RetailContractInitiator extends ContractNetInitiator {
 			}			
 		}
 		if (accepted != null) {
-			((HomeAgent)myAgent).retailer = accepted.getSender();
-			myAgent.addBehaviour(new HomeBill());
+			RetailerHomeMsg content;
+			try {
+				content = (RetailerHomeMsg)accepted.getContentObject();
+				((HomeAgent)myAgent).agreedEnergy = ((HomeAgent)myAgent).energyEstimate;
+				((HomeAgent)myAgent).agreedRate = content.energyRate;
+				((HomeAgent)myAgent).agreedPenalty = content.penaltyRate;
+				((HomeAgent)myAgent).retailer = accepted.getSender();
+				myAgent.addBehaviour(new HomeBill());
+				for(int i = 0; i < responses.size(); i++) {
+					ACLMessage message = (ACLMessage)responses.get(i);
+					ACLMessage reply = message.createReply();
+					if (message.getSender() == ((HomeAgent)myAgent).retailer) {
+						reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					}
+					else {
+						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+					}
+					myAgent.send(reply);
+				}
+			} catch (UnreadableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else {
 			step++;

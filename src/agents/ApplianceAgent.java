@@ -1,5 +1,13 @@
 package agents;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Random;
+import java.util.Vector;
+
+import Serializable.TimeEnergyUse;
+import behaviours.ApplianceRequestResponder;
+import behaviours.ArchiveRequestInitiator;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -9,21 +17,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import util.ApplianceHomeMsg;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.Vector;
-
-import Serializable.TimeEnergyUse;
-import behaviours.ApplianceRequestResponder;
-import behaviours.ArchiveRequestInitiator;
-import behaviours.ArchiveRequestResponder;
  
 @SuppressWarnings("serial")
 public class ApplianceAgent extends Agent {

@@ -1,18 +1,28 @@
 package agents;
 
+import util.Negotiation;
+
 @SuppressWarnings("serial")
 public class SmartRetailer extends RetailerAgent {
+	
+	protected float aggression;
 
 	@Override
 	public void ResetRates() {
-		// TODO Auto-generated method stub
-		
+		if (sale) {
+			aggression += 0.1f;
+		}
+		else {
+			if (aggression > 0.1) {
+				aggression -= 0.1f;
+			}
+		}
+		currentRate = initialRate;
 	}
 
 	@Override
 	public void Yield(int step, int steps) {
-		// TODO Auto-generated method stub
-		
+		currentRate = Negotiation.Calculate(minRate, initialRate, step, steps, aggression);
 	}
 
 }

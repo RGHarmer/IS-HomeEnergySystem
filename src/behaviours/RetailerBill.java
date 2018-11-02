@@ -12,7 +12,7 @@ public class RetailerBill extends CyclicBehaviour {
 		ACLMessage msg = myAgent.receive();
 		if (msg != null) {
 			try {
-				((RetailerAgent) myAgent).score = (float) msg.getContentObject();
+				((RetailerAgent) myAgent).score += (float) msg.getContentObject();
 			} catch (UnreadableException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

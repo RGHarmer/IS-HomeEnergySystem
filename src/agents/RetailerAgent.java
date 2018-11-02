@@ -1,6 +1,7 @@
 package agents;
 
 import behaviours.RetailContractResponder;
+import behaviours.RetailerBill;
 import jade.core.Agent;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -15,11 +16,11 @@ import jade.domain.FIPAException;
 public abstract class RetailerAgent extends Agent {
 
 	public float score;
+	public boolean sale;
 	protected RetailContractResponder rcr;
 	protected float initialRate;
 	protected float currentRate;
 	protected float minRate;
-	protected float aggression;
 	protected float penaltyRate;
 	
 	protected void setup() {
@@ -28,6 +29,8 @@ public abstract class RetailerAgent extends Agent {
 		sd.setType("Retailer");
 		sd.setName(args[1].toString());
 		register(sd);
+		
+		addBehaviour(new RetailerBill());
 		
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
@@ -50,7 +53,7 @@ public abstract class RetailerAgent extends Agent {
 		}
 	}
 	
-	public RetailerHomeMsg ConstructHomeMsg(int step, int steps) {
+	public RetailerHomeMsg ConstructHomeMsg() {
 		return new RetailerHomeMsg(currentRate, penaltyRate);
 	}
 	
