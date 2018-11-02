@@ -24,7 +24,7 @@ import jade.core.behaviours.Behaviour;
  *
  */
 public class DataAgent extends Agent {
-	Vector<TimeEnergyUsage> energyUsageData;
+	public Vector<TimeEnergyUsage> energyUsageData;
 	static String csvFile;
 	static String line = "";
     static String comma = ",";
