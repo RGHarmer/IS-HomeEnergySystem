@@ -1,11 +1,22 @@
 package agents;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import Serializable.PriceCapUpdateMessageContent;
+import behaviours.GUISubscription;
+import behaviours.HomeSubscription;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.SearchConstraints;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
 
 
 public class GUIAgent extends Agent {
@@ -17,7 +28,10 @@ public class GUIAgent extends Agent {
 	public JTextField maxBuyPrice = new JTextField();
     public JComboBox negotiationStrategy = new JComboBox();
 	
-	
+    
+    
+	public AID myHomeAgent;
+    
 	public void SetupGui(){
 		
 		 gui = new JPanel(new java.awt.GridBagLayout());
@@ -106,7 +120,29 @@ public class GUIAgent extends Agent {
 		constraint.gridy = 1;
 		gui.add(negotiationStrategy,constraint);
 		
-		frame.add(gui);
+		
+		
+		
+		JButton updateButton = new JButton("Update");
+		
+		ActionListener buttonPress = new ActionListener()
+    	{
+    		@Override
+	        public void actionPerformed(ActionEvent e)
+	        {
+	        	UpdatePriceCaps();
+	        }
+    	};
+		
+	    updateButton.addActionListener(
+	    		buttonPress
+    	);
+	    
+	    constraint.gridx = 0;
+	    constraint.gridy = 7;
+	    gui.add(updateButton, constraint);
+	    
+	    frame.add(gui);
 		frame.pack();
 	}
 	
@@ -135,7 +171,34 @@ public class GUIAgent extends Agent {
 				}
 			}
 		});
-		
+		Subscribe("Home");
 	}
 	
+	
+
+	protected void Subscribe(String type) {
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription templateSD = new ServiceDescription();
+		templateSD.setType(type);
+		template.addServices(templateSD);
+		SearchConstraints sc = new SearchConstraints();
+		sc.setMaxResults((long)Double.POSITIVE_INFINITY);
+		
+		GUISubscription subscriber = new GUISubscription(this, DFService.createSubscriptionMessage(this,  getDefaultDF(),  template,  sc), type);
+		addBehaviour(subscriber);
+	}
+	
+	
+	protected void UpdatePriceCaps() {
+		ACLMessage m = new ACLMessage();
+		PriceCapUpdateMessageContent priceMessage = new PriceCapUpdateMessageContent(Float.parseFloat(minBuyPrice.getText()), Float.parseFloat(maxBuyPrice.getText()), Float.parseFloat(minSellPrice.getText()), Float.parseFloat(maxSellPrice.getText()));
+		m.setContent(priceMessage.toString());
+		m.addReceiver(myHomeAgent);
+		
+		try {
+			send(m);
+		}catch(Exception e){
+			System.out.println("Error event sending Message, exception: " + e);
+		}
+	}
 }

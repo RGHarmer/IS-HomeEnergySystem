@@ -139,7 +139,7 @@ public class DataAgent extends Agent {
 		register(sd);
 		
 		energyUsageData = new Vector<TimeEnergyUsage>();
-		csvFile = "C:\\Users\\Solar\\Documents\\IS-HomeEnergySystem\\bin\\CSV_DS.csv";
+		csvFile = args[0].toString();
 		
 		readCSV();
 	

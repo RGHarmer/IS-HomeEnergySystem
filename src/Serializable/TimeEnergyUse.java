@@ -2,7 +2,7 @@ package Serializable;
 
 import java.time.Instant;
 import java.util.Vector;
-public class TimeEnergyUse {
+public class TimeEnergyUse implements java.io.Serializable{
 
 	public int absoluteInterval;
 	public Instant time;
