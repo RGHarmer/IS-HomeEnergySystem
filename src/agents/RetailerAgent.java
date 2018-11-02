@@ -27,8 +27,12 @@ public abstract class RetailerAgent extends Agent {
 		Object[] args = getArguments();
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType("Retailer");
-		sd.setName(args[1].toString());
+		sd.setName(args[0].toString());
 		register(sd);
+		
+		initialRate = Integer.parseInt(args[1].toString());
+		minRate = Integer.parseInt(args[2].toString());
+		penaltyRate = Integer.parseInt(args[3].toString());
 		
 		addBehaviour(new RetailerBill());
 		
