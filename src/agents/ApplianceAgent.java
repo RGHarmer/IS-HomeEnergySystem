@@ -22,6 +22,8 @@ import java.util.Vector;
 
 import Serializable.TimeEnergyUse;
 import behaviours.ApplianceRequestResponder;
+import behaviours.ArchiveRequestInitiator;
+import behaviours.ArchiveRequestResponder;
  
 @SuppressWarnings("serial")
 public class ApplianceAgent extends Agent {
@@ -34,6 +36,7 @@ public class ApplianceAgent extends Agent {
 	private float currentEstimate;
 	private float currentUsage;
 	private ApplianceRequestResponder arr;
+	private ArchiveRequestInitiator archiveReqI;
 	
 	protected void setup() {
 		Object[] args = getArguments();
@@ -52,6 +55,10 @@ public class ApplianceAgent extends Agent {
 		for(int l = 0; l<60; l++) {
 			Random rand = new Random( );
 		}
+		
+		ACLMessage m = new ACLMessage();
+		archiveReqI = new ArchiveRequestInitiator(this, m);
+		addBehaviour(archiveReqI);
 	}
 	
 	protected void register(ServiceDescription sd) {
